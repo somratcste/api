@@ -10,21 +10,6 @@ use Illuminate\Routing\Route;
 
 class NoteController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->beforeFilter('@find' , ['only' => ['show','update','destroy']]);
-    // }
-    
-    // public function __construct()
-    // {
-    //     $this->middleware('web' , ['only' => ['show','update','destroy']]);
-    // }
-
-    public function find(Route $route)
-    {
-        $this->note = Note::find($route->getParameter('notes'));
-    }
-
     public function index()
     {
         $notes = Note::all();
@@ -44,7 +29,8 @@ class NoteController extends Controller
 
     public function show($id)
     {
-        return response()->json($this->note);
+        $note = Note::find($id);
+        return response()->json($note);
     }
 
     public function edit($id)
@@ -54,8 +40,9 @@ class NoteController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->note->fill($request->all());
-        $this->note->save();
+        $note = Note::find($id);
+        $note->fill($request->all());
+        $note->save();
         return response()->json(['message' => 'Note Updated']);
     }
 
